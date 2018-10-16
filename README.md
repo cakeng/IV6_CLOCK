@@ -1,7 +1,6 @@
-
 IV-6 VFD Clock design based on attiny4313.
 
-2018. 9. 24 ~ 2018. 10.16
+2018.9.24 ~ 2018.10.16
 
 Software, schemetic, PCB file created by PARK JONG SEOK (박종석)
 
