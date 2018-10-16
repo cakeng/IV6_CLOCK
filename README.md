@@ -8,3 +8,5 @@ NO LICENCE INCLUDED
 Contact cakeng@naver.com to
 use, modify, or share the software, schemetic, PCB for any purpose
 other than personal use.
+
+PCB/Schematic at https://easyeda.com/cakeng/iv8-clock. (Under redesigning as of 2018.10.16)
