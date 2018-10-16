@@ -34,7 +34,7 @@ class DisplayOut
 
 	void refreshDisplay();
 
-	void setDisplay(ClockWorks& clockObj);
+	void setDisplay(ClockWorks& clockObj, bool hour12Mode);
 	void setDisplay(uint8_t h, uint8_t m, uint8_t s);
 	void setDisplay(uint8_t a, uint8_t b, uint8_t c, uint8_t d);
 	void setDisplayNoAnimation(ClockWorks& clockObj);

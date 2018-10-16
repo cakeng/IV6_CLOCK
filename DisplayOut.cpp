@@ -106,7 +106,7 @@ void DisplayOut::refreshDisplay()
 	
 }
 
-void DisplayOut::setDisplay(ClockWorks& clockObj)
+void DisplayOut::setDisplay(ClockWorks& clockObj, bool hour12Mode)
 {
 	
 	screenData[0] &= 0x80;
@@ -114,9 +114,33 @@ void DisplayOut::setDisplay(ClockWorks& clockObj)
 	screenData[2] &= 0x80;
 	screenData[3] &= 0x80;
 	
-
-	screenData[0] |= numDataBox[clockObj.getHour()/10];
-	screenData[1] |= numDataBox[clockObj.getHour()%10];
+	if (hour12Mode)
+	{
+		uint8_t buf = clockObj.getHour();
+		if (buf > 11)
+		{
+			screenData[1] |= 0x80; //PM
+		}
+		else
+		{
+			screenData[1] &= 0x7f; //AM
+		}
+		if (buf > 12)
+		{
+			buf -= 12;
+		}
+		else if (buf == 0)
+		{
+			buf = 12;
+		}
+		screenData[0] |= numDataBox[buf/10];
+		screenData[1] |= numDataBox[buf%10];
+	}
+	else
+	{
+		screenData[0] |= numDataBox[clockObj.getHour()/10];
+		screenData[1] |= numDataBox[clockObj.getHour()%10];
+	}
 	screenData[2] |= numDataBox[clockObj.getMin()/10];
 	screenData[3] |= numDataBox[clockObj.getMin()%10];
 

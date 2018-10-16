@@ -96,16 +96,25 @@ int main(void)
 	DDRB = 0b11111100;
 	DDRD = 0b11111111;
 	
+	bool hour12Mode = false;
 	bool bootUp = true;
 	while (bootUp)
 	{
 		if (clockObj.getSec()/3 == 0)
 		{
 			displayObj.setDisplayBootUp(0);
+			if ((PINB & (1<<PINB0)) == 0)
+			{
+				hour12Mode = true;
+			}
 		}
 		else if (clockObj.getSec() == 3 || clockObj.getSec() == 4)
 		{
 			displayObj.setDisplayBootUp(1);
+			if ((PINB & (1<<PINB0)) == 0)
+			{
+				hour12Mode = true;
+			}
 		}
 		else if (clockObj.getSec() == 5)
 		{
@@ -125,35 +134,35 @@ int main(void)
 		
 		/*if ((clockObj.getHour()&0x01))
 		{
-			displayObj.setDot(3,true);
+		displayObj.setDot(3,true);
 		}
 		else
 		{
-			displayObj.setDot(3,false);
+		displayObj.setDot(3,false);
 		}
 		if ((clockObj.getHour()&0x02))
 		{
-			displayObj.setDot(2,true);
+		displayObj.setDot(2,true);
 		}
 		else
 		{
-			displayObj.setDot(2,false);
+		displayObj.setDot(2,false);
 		}
 		if ((clockObj.getHour()&0x04))
 		{
-			displayObj.setDot(1,true);
+		displayObj.setDot(1,true);
 		}
 		else
 		{
-			displayObj.setDot(1,false);
+		displayObj.setDot(1,false);
 		}
 		if ((clockObj.getHour()&0x08))
 		{
-			displayObj.setDot(0,true);
+		displayObj.setDot(0,true);
 		}
 		else
 		{
-			displayObj.setDot(0,false);
+		displayObj.setDot(0,false);
 		}*/
 		if (clockObj.getTimeTicksMs() > 500)
 		{
@@ -165,7 +174,7 @@ int main(void)
 		}
 		buttonObj.buttonFunction(displayObj);
 		inputFunction(buttonObj.getButtonPressed(), buttonObj.getButtonCounter());
-		displayObj.setDisplay(clockObj);
+		displayObj.setDisplay(clockObj, hour12Mode);
 		
 		displayObj.animationRoutin();
 	}
