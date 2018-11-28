@@ -14,5 +14,6 @@ PCB/Schematic at https://easyeda.com/cakeng/iv8-clock. (Under redesigning as of 
 ![1539603962576](./1539603962576.jpg)
 
 //EDIT
-Currently updating the system to use the newly released Attiny816 (2018.11.28)
+Currently updating the system to use the newly released Attiny816. (2018.11.28)
+
 Code is for attiny4313. PCB is using Attiny816.
