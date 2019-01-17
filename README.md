@@ -1,6 +1,6 @@
-IV-6 VFD Clock design based on attiny4313.
+IV-6 VFD Clock design based on attiny816.
 
-2018.9.24 ~ 2018.10.16
+2018.9.24 ~ 2019.01.17
 
 Software, schemetic, PCB file created by PARK JONG SEOK (박종석)
 
@@ -13,8 +13,5 @@ PCB/Schematic at https://easyeda.com/cakeng/iv8-clock.
 
 ![1539603962576](./1539603962576.jpg)
 
-//EDIT
-
-Currently updating the system to use the newly released Attiny816. (2018.11.28)
-
-Code is for attiny4313. PCB is using Attiny816.
+The clock in above picture is an older version using Attiny4313. 
+The new Attiny816 model mostly uses SMD parts. Also more buttons, alarm and music feature were added.
