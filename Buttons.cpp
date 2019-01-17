@@ -6,8 +6,7 @@
 *
 *	NO LICENCE INCLUDED
 *	Contact cakeng@naver.com to
-*	use, modify, or share the software for any purpose
-*	other than personal use.
+*	use, modify, or share the software for any purpose.
 *
 */
 #include "Buttons.h"
@@ -15,57 +14,56 @@
 
 void Buttons::checkInputs()
 {
-	buttonPressed = NULL;
-	if(!BIT_CHECK(BUTTON_INPUT_UP_PORT_GROUP, BUTTON_INPUT_UP))
+	buttonPressedData = BUTTON_NULL;
+	PORTC_DIRCLR = 0b00000001;
+	PORTB_DIRCLR = 0b00000011;
+	if((PORTC_IN&0b00000001))
 	{
-		buttonPressed = BUTTON_UP_PRESSED;
+		buttonPressedData = BUTTON_UP_PRESSED;
 	}
-}
-
-Buttons::Buttons(uint16_t tickFreq, bool pinOn) //Ticks to reach 1 second.
-{
-	buttonTicks = 0;
-	buttonCheckRateConsts[0] = (tickFreq/500*20); //40ms
-	buttonCheckRateConsts[1] = (tickFreq/500*80); //160ms
-	buttonCheckRateConsts[2] = (tickFreq/500*30); //60ms
-	buttonCheckRate = buttonCheckRateConsts[2];
-	buttonCounter = 0;
-	buttonPressed = NULL;
-	buttonLast = NULL;
+	else if(!(PORTB_IN&0b00000001))
+	{
+		buttonPressedData = BUTTON_DOWN_PRESSED;
+	}
+	else if(!(PORTB_IN&0b00000010))
+	{
+		buttonPressedData = BUTTON_ALARM_PRESSED;
+	}
 }
 
 Buttons::Buttons(uint16_t tickFreq) //Ticks to reach 1 second.
 {
 	buttonTicks = 0;
-	buttonCheckRateConsts[0] = (tickFreq/500*7); //14ms
-	buttonCheckRateConsts[1] = (tickFreq/500*80); //160ms
-	buttonCheckRateConsts[2] = (tickFreq/500*30); //60ms
-	buttonCheckRate = buttonCheckRateConsts[2];
+	uint16_t temp = tickFreq/1000; // 1ms
+	buttonCheckRateConsts[0] = (temp*24); //24ms
+	buttonCheckRateConsts[1] = (temp*220); //220ms
+	buttonCheckRate = buttonCheckRateConsts[0];
 	buttonCounter = 0;
-	buttonPressed = NULL;
-	buttonLast = NULL;
-	BIT_OFF(BUTTON_INPUT_UP_DATA_GROUP, BUTTON_INPUT_UP);
+	buttonPressedData = BUTTON_NULL;
+	buttonLastData = BUTTON_NULL;
 }
+
 
 void Buttons::buttonFunction(DisplayOut& displayObj)
 {
 	buttonPressedOut = BUTTON_UNDER_TICKS;
-	buttonCountNum = buttonCounter;
+	buttonCountOut = buttonCounter;
 	if(buttonTicks < buttonCheckRate)
 	{
 		return;
 	}
-	buttonPressedOut = NULL;
+	buttonPressedOut = BUTTON_NULL;
 	buttonTicks = 0;
 	checkInputs();
-	if(buttonPressed == NULL) // If no buttons were pressed
+	if(buttonPressedData == BUTTON_NULL) // If no buttons were pressed
 	{
-		if(buttonLast != NULL) // If something was pressed before
+		if(buttonLastData != BUTTON_NULL) // If something was pressed before
 		{
-			buttonPressedOut = buttonLast;
-			buttonLast = NULL;
+			
+			buttonPressedOut = buttonLastData;
+			buttonLastData = BUTTON_NULL;
 			buttonCounter = 0;
-			buttonCheckRate = buttonCheckRateConsts[2];
+			buttonCheckRate = buttonCheckRateConsts[0];
 			displayObj.animationNormalSpeed();
 		}
 		return;
@@ -76,14 +74,15 @@ void Buttons::buttonFunction(DisplayOut& displayObj)
 		buttonCheckRate = buttonCheckRateConsts[0];
 		displayObj.animationFasterSpeed();
 	}
-	else if(buttonCounter > 4)
+	else if(buttonCounter > 5)
 	{
 		buttonCheckRate = buttonCheckRateConsts[1];
 	}
-	else if (buttonCounter == 1)
+	else if (buttonCounter > 2)
 	{
 		displayObj.animationFastSpeed();
 	}
-	buttonPressedOut = buttonPressed;
-	buttonLast = buttonPressed+3;
+	buttonPressedOut = buttonPressedData;
+	buttonLastData = buttonPressedData+3;
 }
+

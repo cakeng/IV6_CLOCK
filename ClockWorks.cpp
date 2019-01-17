@@ -6,8 +6,7 @@
 *
 *	NO LICENCE INCLUDED
 *	Contact cakeng@naver.com to
-*	use, modify, or share the software for any purpose
-*	other than personal use.
+*	use, modify, or share the software for any purpose.
 *
 */
 
@@ -20,7 +19,6 @@ ClockWorks::ClockWorks(uint8_t h, uint8_t m, uint8_t s, uint16_t tickFreq)
 	secs = s;
 	timeTicks = 0;
 	timeTicksConstant = tickFreq;
-	bias = 22;
 	clockKeeping();
 }
 void ClockWorks::clockKeeping()
@@ -29,7 +27,6 @@ void ClockWorks::clockKeeping()
 	{
 		secs -= 60;
 		mins++;
-		timeTicks -= bias;
 	}
 	else if (secs < 0)
 	{
@@ -70,14 +67,4 @@ void ClockWorks::getTime(uint8_t& h, uint8_t& m, uint8_t& s)
 	s = secs;
 }
 
-void ClockWorks::autoRoutine()
-{
-	timeTicks++;
-	if(timeTicks > timeTicksConstant)
-	{
-		secs++;
-		timeTicks -= timeTicksConstant;
-		clockKeeping();
-	}
-}
 
